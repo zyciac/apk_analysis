@@ -138,7 +138,7 @@ public class iCFGSAnalyzer {
         }
     }
     public static void getMethodSubGraph(String apkPath, CallGraph cg, Pattern searchPattern){
-        Boolean DEBUG = false;
+        Boolean DEBUG = true;
         String apkBaseName = FilenameUtils.getBaseName(apkPath);
         QueueReader<Edge> edges = cg.listener();
         Collection<SootMethod> iMethodsSet = new HashSet<>();
@@ -192,6 +192,9 @@ public class iCFGSAnalyzer {
 
         if(DEBUG){
             System.out.println("Search Complete: interesting Methods: " + iMethodsSet.size());
+            for (SootMethod m : iMethodsSet){
+                System.out.println(m.toString());
+            }
         }
         if(iMethodsSet.size() == 0){
             System.out.println("Interestings Method None, abort.");
@@ -260,7 +263,10 @@ public class iCFGSAnalyzer {
                         tmpinMethodsQueue.add(mIntoTmpM);
                     }
                 }
-                inMethodsQueue = tmpinMethodsQueue;
+
+//                inMethodsQueue = tmpinMethodsQueue;
+                inMethodsQueue.clear();
+                inMethodsQueue.addAll(tmpinMethodsQueue);
                 tmpinMethodsQueue.clear();
                 curInDepth += 1;
                 //            while(inMethodsQueue.size()>0){
@@ -279,7 +285,7 @@ public class iCFGSAnalyzer {
             }
 
             if (DEBUG) {
-                System.out.println("Updating Subgraph: updating intoMethod Subgraph");
+                System.out.println("Updating Subgraph: updating OutofMethod Subgraph");
             }
             while (curOutDepth < maxOutDepth) {
                 if (DEBUG) {
@@ -300,8 +306,10 @@ public class iCFGSAnalyzer {
                         tmpOutMethodsQueue.add(mOutTmpM);
                     }
                 }
-                outMethodsQueue = tmpOutMethodsQueue;
 
+//                outMethodsQueue = tmpOutMethodsQueue;
+                outMethodsQueue.clear();
+                outMethodsQueue.addAll(tmpOutMethodsQueue);
                 tmpOutMethodsQueue.clear();
                 curOutDepth += 1;
                 //            while(inMethodsQueue.size()>0){
@@ -432,9 +440,11 @@ public class iCFGSAnalyzer {
 
     public static Collection<SootMethod> getOutofMethods(SootMethod func, CallGraph cg){
         Iterator<Edge> outIter = cg.edgesOutOf(func);
+//        System.out.println("getting outofmethods of "+ func.toString());
         Collection<SootMethod> outMethodQueue = new HashSet<SootMethod>();
         while(outIter.hasNext()){
-            SootMethod m = (SootMethod) outIter.next().getSrc();
+            SootMethod m = (SootMethod) outIter.next().getTgt();
+//            System.out.println("out of methods: "+m.toString());
             outMethodQueue.add(m);
         }
         return outMethodQueue;
