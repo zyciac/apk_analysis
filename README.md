@@ -1,4 +1,6 @@
-Citing our paper is welcomed, if you find my article or code helpful:
+## Android apk callgraph extracting workspace using flowdroid.
+
+## Reference
 ```
 @inproceedings{fu2017leaksemantic,
   title={Leaksemantic: Identifying abnormal sensitive network transmissions in mobile applications},
