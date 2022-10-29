@@ -1,4 +1,4 @@
-/*
+package analysis;/*
  * Generate detailed Call Graph
  */
 
@@ -24,7 +24,8 @@ import static soot.util.dot.DotGraph.DOT_EXTENSION;
 public class CallGraphGenerator {
     /**
      *
-     * @param args args[0]: the apk file; args[1]: android.jar
+     * @param args args[0]: the apk file; "apk path"
+     *             args[1]: android.jar; "C:\Users\Yichi\Library\Android\sdk\platforms"
      */
     public static void main(String[] args) {
         assert args.length >= 2;
@@ -84,7 +85,11 @@ public class CallGraphGenerator {
 
     public static void buildCallGraph(String apkDir, String platformDir) {
         SetupApplication app = new SetupApplication(platformDir, apkDir);
+        long start = System.nanoTime();
         app.constructCallgraph();
+        long elapsedTime = java.lang.System.nanoTime() - start;
+        System.out.println(elapsedTime/1000000000 + " seconds");
+
     }
 
 }
